@@ -1,11 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { v4 as uuid } from 'uuid'
 
 export function SignTextRadioBox(props) {
+    let data = useRef({ uuid: props.uuid })
+
+    const updatePrimaryAdmin = (e) => {
+        props.bubbleUpPrimary(e.target.value)
+    }
+    const updateSignGroup = (e) => {
+        data.current.signGroup = e.target.value
+        props.bubbleUp(data.current)
+    }
     return (
         <div key={props.uuid}>
-            <input key={props.uuid} type="text" style={{ marginBottom: "10px", marginRight: "5px" }} />
-            <input type="radio" name="primaryGroup" value={props.uuid} />
+            <input key={props.uuid} type="text" style={{ marginBottom: "10px", marginRight: "5px" }} onChange={updateSignGroup} />
+            <input type="radio" name="primaryGroup" value={props.uuid} onChange={updatePrimaryAdmin} />
             <span style={{ marginBottom: "10px", marginRight: "50px" }}>
                 Primary Group?
             </span>
@@ -16,17 +25,27 @@ export function SignTextRadioBox(props) {
 }
 
 export function PrimaryGroupRule(props) {
-
+    const data = useRef({ uuid: props.uuid, rules: {} })
+    const mysetter = (c) => {
+        data.current.rules[c.uuid] = c;
+        props.bubbleUp((data.current))
+    }
+    const myPrimarySetter = (c) => {
+        data.current.rules.isPrimary = c;
+        props.bubbleUp((data.current))
+    }
     const [txtBoxes, setTxtBoxes] = useState([])
     const [deletedEntry, setDeletedEntry] = useState()
     useEffect(() => {
         setTxtBoxes(txtBoxes.filter(item => item.props.uuid !== deletedEntry));
+        data.current.rules[deletedEntry] = undefined;
+        props.bubbleUp(data.current)
     }, [deletedEntry]);
 
     const handleClick = () => {
         const newId = uuid();
 
-        const f = <SignTextRadioBox uuid={newId} key={newId} deleter={setDeletedEntry} />;
+        const f = <SignTextRadioBox uuid={newId} key={newId} deleter={setDeletedEntry} bubbleUp={mysetter} bubbleUpPrimary={myPrimarySetter} />;
         const newContent = [...txtBoxes, f];
         setTxtBoxes(newContent);
     };
@@ -48,16 +67,22 @@ export function PrimaryGroupRule(props) {
     </div>);
 }
 
-export default function PrimaryGroupRules() {
-
+export default function PrimaryGroupRules(props) {
+    const data = useRef({})
+    const mysetter = (c) => {
+        data.current[c.uuid] = c;
+        props.bubbleUp((data.current))
+    }
     const [pgrpRules, setPgrpRules] = useState([])
     const [deletedRuleEntry, setDeletedRuleEntry] = useState()
     useEffect(() => {
         setPgrpRules(pgrpRules.filter(item => item.props.uuid !== deletedRuleEntry));
+        data.current[deletedRuleEntry] = undefined;
+        props.bubbleUp(data.current)
     }, [deletedRuleEntry]);
     const handleRulesClick = () => {
         const newId = uuid();
-        const f = <PrimaryGroupRule key={newId} uuid={newId} deleter={setDeletedRuleEntry} />;
+        const f = <PrimaryGroupRule key={newId} uuid={newId} deleter={setDeletedRuleEntry} bubbleUp={mysetter} />;
         const newContent = [...pgrpRules, f];
         setPgrpRules(newContent);
     };
