@@ -14,7 +14,7 @@ export function SignTextRadioBox(props) {
     return (
         <div key={props.uuid}>
             <input key={props.uuid} type="text" style={{ marginBottom: "10px", marginRight: "5px" }} onChange={updateSignGroup} />
-            <input type="radio" name="primaryGroup" value={props.uuid} onChange={updatePrimaryAdmin} />
+            <input type="radio" name={"primaryGroup-" + props.uber} value={props.uuid} onChange={updatePrimaryAdmin} />
             <span style={{ marginBottom: "10px", marginRight: "50px" }}>
                 Primary Group?
             </span>
@@ -45,7 +45,7 @@ export function PrimaryGroupRule(props) {
     const handleClick = () => {
         const newId = uuid();
 
-        const f = <SignTextRadioBox uuid={newId} key={newId} deleter={setDeletedEntry} bubbleUp={mysetter} bubbleUpPrimary={myPrimarySetter} />;
+        const f = <SignTextRadioBox uber={data.current.uuid} uuid={newId} key={newId} deleter={setDeletedEntry} bubbleUp={mysetter} bubbleUpPrimary={myPrimarySetter} />;
         const newContent = [...txtBoxes, f];
         setTxtBoxes(newContent);
     };
