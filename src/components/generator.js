@@ -1,7 +1,7 @@
 import Mappings from "./mappings"
 import PrimaryGroupRules from "./primaryGroupRules";
 import { useState, useEffect } from 'react';
-const YAML = require('yaml');
+import YAML from 'yaml'
 
 
 export default function Generator() {
@@ -24,9 +24,12 @@ export default function Generator() {
         setPayloadPrimaryRules(null)
     }, [payloadPrimaryRules]);
 
-    const convertData = (inp) => {
+    const convertData = (inpData, inpPrimary) => {
+        let inp = inpData;
         let finalData = {
-            user_management: []
+            account_admin_groups: [],
+            user_management: [],
+            primary_group_rules: []
         };
         for (const entry in inp) {
             if (!entry || !inp[entry])
@@ -44,16 +47,14 @@ export default function Generator() {
                     mapping.admin_groups.push(inp[entry].sign[signEntry]?.signGroup);
                 }
             }
-            mapping.group_admin = mapping.admin_groups.length != 0
+
+            if (inp[entry].directory?.accAdmin) {
+                finalData.account_admin_groups.push(mapping.directory_group);
+            }
+            mapping.group_admin = mapping.admin_groups.length !== 0
             finalData.user_management.push(mapping);
         }
-        return finalData;
-    }
-
-    const convertDataPrimaryRules = (inp) => {
-        let finalData = {
-            primary_group_rules: []
-        };
+        inp = inpPrimary
         for (const entry in inp) {
             if (!entry || !inp[entry])
                 continue;
@@ -76,9 +77,9 @@ export default function Generator() {
         return finalData;
     }
 
-    const convertToYaml = (inp) => {
+    const convertToYaml = (inp, inp1) => {
         const doc = new YAML.Document();
-        doc.contents = convertData(inp);
+        doc.contents = convertData(inp, inp1);
         return doc.toString();
     }
     return (
@@ -92,10 +93,7 @@ export default function Generator() {
                 <PrimaryGroupRules bubbleUp={setPayloadPrimaryRules} />
             </div>
             <div style={{ marginTop: "50px" }}>
-                <pre>{YAML.stringify(convertToYaml(data))}</pre>
-            </div>
-            <div style={{ marginTop: "50px" }}>
-                <pre>{YAML.stringify(convertDataPrimaryRules(dataPrimaryRules))}</pre>
+                <pre>{YAML.stringify(convertToYaml(data, dataPrimaryRules))}</pre>
             </div>
         </div>
     );
