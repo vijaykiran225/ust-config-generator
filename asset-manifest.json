@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/ust-config-generator/static/js/main.d31dc6e0.js",
+    "static/js/453.fc81acbe.chunk.js": "/ust-config-generator/static/js/453.fc81acbe.chunk.js",
+    "index.html": "/ust-config-generator/index.html",
+    "main.d31dc6e0.js.map": "/ust-config-generator/static/js/main.d31dc6e0.js.map",
+    "453.fc81acbe.chunk.js.map": "/ust-config-generator/static/js/453.fc81acbe.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d31dc6e0.js"
+  ]
+}
