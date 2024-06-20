@@ -24,12 +24,10 @@ export default function Generator() {
         setPayloadPrimaryRules(null)
     }, [payloadPrimaryRules]);
 
-    const convertData = (inpData, inpPrimary) => {
-        let inp = inpData;
+    const convertData = (inp) => {
         let finalData = {
             account_admin_groups: [],
-            user_management: [],
-            primary_group_rules: []
+            user_management: []
         };
         for (const entry in inp) {
             if (!entry || !inp[entry])
@@ -54,7 +52,13 @@ export default function Generator() {
             mapping.group_admin = mapping.admin_groups.length !== 0
             finalData.user_management.push(mapping);
         }
-        inp = inpPrimary
+        return finalData;
+    }
+
+    const convertDataPrimaryRules = (inp) => {
+        let finalData = {
+            primary_group_rules: []
+        };
         for (const entry in inp) {
             if (!entry || !inp[entry])
                 continue;
@@ -77,9 +81,9 @@ export default function Generator() {
         return finalData;
     }
 
-    const convertToYaml = (inp, inp1) => {
+    const convertToYaml = (inp) => {
         const doc = new YAML.Document();
-        doc.contents = convertData(inp, inp1);
+        doc.contents = convertData(inp);
         return doc.toString();
     }
     return (
@@ -93,7 +97,10 @@ export default function Generator() {
                 <PrimaryGroupRules bubbleUp={setPayloadPrimaryRules} />
             </div>
             <div style={{ marginTop: "50px" }}>
-                <pre>{YAML.stringify(convertToYaml(data, dataPrimaryRules))}</pre>
+                <pre>{YAML.stringify(convertToYaml(data))}</pre>
+            </div>
+            <div style={{ marginTop: "50px" }}>
+                <pre>{YAML.stringify(convertDataPrimaryRules(dataPrimaryRules))}</pre>
             </div>
         </div>
     );
