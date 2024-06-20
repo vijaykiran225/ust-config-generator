@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/ust-config-generator/static/js/main.19abc865.js",
+    "main.js": "/ust-config-generator/static/js/main.30852579.js",
     "static/js/453.fc81acbe.chunk.js": "/ust-config-generator/static/js/453.fc81acbe.chunk.js",
     "index.html": "/ust-config-generator/index.html",
-    "main.19abc865.js.map": "/ust-config-generator/static/js/main.19abc865.js.map",
+    "main.30852579.js.map": "/ust-config-generator/static/js/main.30852579.js.map",
     "453.fc81acbe.chunk.js.map": "/ust-config-generator/static/js/453.fc81acbe.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.19abc865.js"
+    "static/js/main.30852579.js"
   ]
 }
